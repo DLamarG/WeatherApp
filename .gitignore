@@ -1,0 +1,8 @@
+.env
+*.pem
+__pycache__
+node_modules
+env_Virtual
+.DS_Store
+RecipeAppKey.pem
+rootkey.csv

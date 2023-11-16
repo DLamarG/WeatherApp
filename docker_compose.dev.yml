@@ -1,0 +1,31 @@
+#########################################
+# The "development" compose file builds 
+# the images locally
+#########################################
+
+version: "3"
+services:
+  weather-api:
+    build: ./back_end
+    ports:
+      - "8000:8000"
+    environment:
+      - SECRET_KEY=$SECRET_KEY
+      - DEBUG=$DEBUG
+      - DATABASE_NAME=$POSTGRES_DB
+      - DATABASE_USER=$POSTGRES_USER
+      - DATABASE_PASSWORD=$POSTGRES_PASSWORD
+      - API_KEY=$API_KEY
+    depends_on:
+      - weather_db
+  weather_db:
+    image: postgres:15
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_DB=$POSTGRES_DB
+      - POSTGRES_USER=$POSTGRES_USER
+      - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+
+volumes:
+  postgres_data:
