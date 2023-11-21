@@ -2,7 +2,7 @@
 *.pem
 __pycache__
 node_modules
-env_Virtual
+envVirtual
 .DS_Store
 RecipeAppKey.pem
 rootkey.csv
