@@ -29,26 +29,25 @@ class MyLocationsAPIView(APIView):
 
 
 
-    def delete(self, request, location_id):
-        user = request.user
-        location_id=location_id
+    # def delete(self, request, location_id):
+    #     user = request.user
+    #     location_id=location_id
         
+    #     try:
+    #         profile = UserAccount.objects.get(user=user)
+    #         my_location = profile.my_locations.filter(location_id=location_id).first()
 
-        try:
-            profile = UserAccount.objects.get(user=user)
-            my_location = profile.my_locations.filter(location_id=location_id).first()
+    #         if my_location:
+    #             # Delete the recipe from the user's list
+    #             profile.my_locations.remove(my_location)
+    #             my_location.delete()
 
-            if my_location:
-                # Delete the recipe from the user's list
-                profile.my_locations.remove(my_location)
-                my_location.delete()
+    #             return Response({'message': 'Location deleted.'}, status=status.HTTP_204_NO_CONTENT)
+    #         else:
+    #             return Response({'message': 'Location not found in the list.'}, status=status.HTTP_404_NOT_FOUND)
 
-                return Response({'message': 'Location deleted.'}, status=status.HTTP_204_NO_CONTENT)
-            else:
-                return Response({'message': 'Location not found in the list.'}, status=status.HTTP_404_NOT_FOUND)
-
-        except UserAccount.DoesNotExist:
-            return Response({'message': 'User profile not found.'}, status=status.HTTP_404_NOT_FOUND)
+    #     except UserAccount.DoesNotExist:
+    #         return Response({'message': 'User profile not found.'}, status=status.HTTP_404_NOT_FOUND)
 
     
 
@@ -68,6 +67,27 @@ class MyLocationsAPIView(APIView):
             # Add the location to the user's my_locations
             user_profile.my_locations.add_to_locations(new_location)
             return Response({'message': 'Location added successfully.'}, status=status.HTTP_201_CREATED)
+
+        except UserAccount.DoesNotExist:
+            return Response({'message': 'User profile not found.'}, status=status.HTTP_404_NOT_FOUND)
+        
+
+    def delete(self, request, location_id):
+        user = request.user
+        location_id = location_id
+
+        try:
+            profile = UserAccount.objects.get(user=user)
+            location = profile.my_locations.filter(location_id=location_id).first()
+
+            if location:
+                # Delete the recipe from the user's list
+                profile.my_locations.remove(location)
+                location.delete()
+
+                return Response({'message': 'Recipe deleted.'}, status=status.HTTP_204_NO_CONTENT)
+            else:
+                return Response({'message': 'Recipe not found in the list.'}, status=status.HTTP_404_NOT_FOUND)
 
         except UserAccount.DoesNotExist:
             return Response({'message': 'User profile not found.'}, status=status.HTTP_404_NOT_FOUND)
