@@ -4,9 +4,10 @@ from rest_framework import status
 from user_account.models import UserAccount
 from user_locations.models import Location
 from user_locations.serializers import LocationSerializer
+from user_locations.serializers import LocationSerializer
 
 
-class MyLocatoinsAPIView(APIView):
+class MyLocationsAPIView(APIView):
     def get(self, request):
         user = request.user  # Get the currently logged-in user
         
@@ -25,27 +26,13 @@ class MyLocatoinsAPIView(APIView):
     
     
 
-    def post(self, request):
-        location = request.data.get('location')
-        user = request.user
-        
-        try:
-            profile = UserAccount.objects.get(user=user)
-            if not profile.my_locations.filter(location=location).exists():
-                location = Location.objects.create(location=location)
-                profile.my_locations.add(location)
-                return Response({'message': 'Location added.'}, status=status.HTTP_200_OK)
-            else:
-                return Response({'message': 'Location already in list.'}, status=status.HTTP_200_OK)
-
-        except UserAccount.DoesNotExist:
-            return Response({'message': 'User profile not found.'}, status=status.HTTP_404_NOT_FOUND)
 
 
 
     def delete(self, request, location_id):
         user = request.user
-        location_id = location_id
+        location_id=location_id
+        
 
         try:
             profile = UserAccount.objects.get(user=user)
@@ -62,4 +49,27 @@ class MyLocatoinsAPIView(APIView):
 
         except UserAccount.DoesNotExist:
             return Response({'message': 'User profile not found.'}, status=status.HTTP_404_NOT_FOUND)
+
+    
+
+    def post(self, request):
+        user = request.user
+        location_data = request.data
+
+        try:
+            user_profile = UserAccount.objects.get(user=user)
+
+            # Create a new Location instance
+            new_location = Location.objects.create(
+                location=location_data.get('location'),
+                zipcode=location_data.get('zipcode')
+            )
+
+            # Add the location to the user's my_locations
+            user_profile.my_locations.add_to_locations(new_location)
+            return Response({'message': 'Location added successfully.'}, status=status.HTTP_201_CREATED)
+
+        except UserAccount.DoesNotExist:
+            return Response({'message': 'User profile not found.'}, status=status.HTTP_404_NOT_FOUND)
+
 
