@@ -5,6 +5,8 @@ from user_account.models import UserAccount
 from user_locations.models import Location
 from user_locations.serializers import LocationSerializer
 from user_locations.serializers import LocationSerializer
+from .serializers import LocationDeletionSerializer
+from rest_framework import generics, status
 
 
 class MyLocationsAPIView(APIView):
@@ -23,31 +25,6 @@ class MyLocationsAPIView(APIView):
 
         except UserAccount.DoesNotExist:
             return Response({'message': 'User profile not found.'}, status=status.HTTP_404_NOT_FOUND)
-    
-    
-
-
-
-
-    # def delete(self, request, location_id):
-    #     user = request.user
-    #     location_id=location_id
-        
-    #     try:
-    #         profile = UserAccount.objects.get(user=user)
-    #         my_location = profile.my_locations.filter(location_id=location_id).first()
-
-    #         if my_location:
-    #             # Delete the recipe from the user's list
-    #             profile.my_locations.remove(my_location)
-    #             my_location.delete()
-
-    #             return Response({'message': 'Location deleted.'}, status=status.HTTP_204_NO_CONTENT)
-    #         else:
-    #             return Response({'message': 'Location not found in the list.'}, status=status.HTTP_404_NOT_FOUND)
-
-    #     except UserAccount.DoesNotExist:
-    #         return Response({'message': 'User profile not found.'}, status=status.HTTP_404_NOT_FOUND)
 
     
 
@@ -65,31 +42,40 @@ class MyLocationsAPIView(APIView):
             )
 
             # Add the location to the user's my_locations
-            user_profile.my_locations.add_to_locations(new_location)
+            user_profile.my_locations.add(new_location)
             return Response({'message': 'Location added successfully.'}, status=status.HTTP_201_CREATED)
 
         except UserAccount.DoesNotExist:
             return Response({'message': 'User profile not found.'}, status=status.HTTP_404_NOT_FOUND)
         
 
-    def delete(self, request, location_id):
+
+
+class LocationDeletionView(generics.DestroyAPIView):
+    queryset = UserAccount.objects.all()  # Adjust the queryset based on your needs
+    serializer_class = LocationDeletionSerializer
+
+    def delete(self, request, *args, **kwargs):
         user = request.user
-        location_id = location_id
+        serializer = self.get_serializer(data=request.data)
 
-        try:
-            profile = UserAccount.objects.get(user=user)
-            location = profile.my_locations.filter(location_id=location_id).first()
+        if serializer.is_valid():
+            location_id = serializer.validated_data['location_id']
 
-            if location:
-                # Delete the recipe from the user's list
-                profile.my_locations.remove(location)
-                location.delete()
+            try:
+                user_profile = UserAccount.objects.get(user=user)
 
-                return Response({'message': 'Recipe deleted.'}, status=status.HTTP_204_NO_CONTENT)
-            else:
-                return Response({'message': 'Recipe not found in the list.'}, status=status.HTTP_404_NOT_FOUND)
+                # Check if the location exists in the user's my_locations
+                location_to_delete = user_profile.my_locations.filter(location_id=location_id).first()
 
-        except UserAccount.DoesNotExist:
-            return Response({'message': 'User profile not found.'}, status=status.HTTP_404_NOT_FOUND)
+                if location_to_delete:
+                    # Remove the location from the user's my_locations
+                    user_profile.my_locations.remove(location_to_delete)
+                    return Response({'message': 'Location deleted successfully.'}, status=status.HTTP_204_NO_CONTENT)
+                else:
+                    return Response({'message': 'Location not found in user\'s locations.'}, status=status.HTTP_404_NOT_FOUND)
 
+            except UserAccount.DoesNotExist:
+                return Response({'message': 'User profile not found.'}, status=status.HTTP_404_NOT_FOUND)
 
+        return Response({'message': 'Invalid data provided for location deletion.'}, status=status.HTTP_400_BAD_REQUEST)
