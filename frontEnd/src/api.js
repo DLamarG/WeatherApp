@@ -45,10 +45,37 @@ export async function basicFetch(url, payload) {
         "Authorization": `Token ${userToken}`
       },
     }
-    const body = await basicFetch(`${API_URL}+${city}/`, payload)
-    return body
+    const weatherData = await basicFetch(`${API_URL}+${city}/`, payload)
+    return weatherData
 
   }
   
 
+  export async function myWeatherInformation(){
+    const API_URL = 'http://localhost:8000/api/v4/user_location_data/';
+    const userToken = localStorage.getItem("token")
+    const payload = {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Token ${userToken}`
+      },
+    }
+    const body = await basicFetch(`${API_URL}`, payload)
+    return body
+  }
+
   
+  export async function addLocation(context) {
+    const userToken = localStorage.getItem("token")
+    const payload = {
+      method: "POST",
+      headers: {
+        "Authorization": `Token ${userToken}`
+      },
+      body: context
+    }
+    const body = await basicFetch(`http://localhost:8000/api/v3/locations/`, payload)
+    console.log(body)
+    return {"success": "Your new location has been added!"}
+  }
