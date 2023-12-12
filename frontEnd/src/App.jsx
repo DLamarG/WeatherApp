@@ -10,8 +10,6 @@ import Login from './components/login'
 import Register from './components/register';
 import Logout from './components/logout';
 import ProtectedRoutes from './protectedRoutes';
-import MyLocations from './components/myLocations';
-import AddLocation from './components/addLocation';
 
 
 function App() {
@@ -25,8 +23,6 @@ function App() {
           <Route element={<ProtectedRoutes />}>
             <Route path='/home' element={<Home />} />
             <Route path='/user/logout' element={<Logout />} />
-            <Route path='/user/user_locations' element={<MyLocations />} />
-            <Route path='/user/add_location' element={<AddLocation />} />
           </Route>
       </Routes>
     </HashRouter>

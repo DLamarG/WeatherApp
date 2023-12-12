@@ -22,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv("SECRET_KEY")
+SECRET_KEY = os.getenv("SECRET_KEY", 'weather123')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True if os.getenv("DEBUG") == "True" else False
@@ -87,11 +87,11 @@ WSGI_APPLICATION = 'weather_API.wsgi.application'
 DATABASES = {
     "default": {
     "ENGINE": "django.db.backends.postgresql",
-    "NAME": os.getenv("DATABASE_NAME", "weather_app_db"),
+    "NAME": os.getenv("DATABASE_NAME", "weather_db"),
     "USER": os.getenv("DATABASE_USER", "postgres"),
     "PASSWORD": os.getenv("DATABASE_PASSWORD", "postgres"),
-    "HOST": "weather_db",
-    "PORT": 5432,
+    "HOST": "localhost",
+    "PORT": 5454,
     }
 }
 

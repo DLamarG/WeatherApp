@@ -5,19 +5,6 @@
 
 version: "3"
 services:
-  migrate-service:
-    build: ./back_end
-    environment:
-      - SECRET_KEY=$SECRET_KEY
-      - DEBUG=$DEBUG
-      - DATABASE_NAME=$POSTGRES_DB
-      - DATABASE_USER=$POSTGRES_USER
-      - DATABASE_PASSWORD=$POSTGRES_PASSWORD
-      - API_KEY=$API_KEY
-    command: /bin/sh -c "python manage.py makemigrations && python manage.py migrate && exec tail -f /dev/null"
-    depends_on:
-      - weather_db
-
   weather-api:
     build: ./back_end
     ports:
@@ -30,7 +17,7 @@ services:
       - DATABASE_PASSWORD=$POSTGRES_PASSWORD
       - API_KEY=$API_KEY
     depends_on:
-      - migrate-service
+      - weather_db
 
   weather_db:
     image: postgres:15

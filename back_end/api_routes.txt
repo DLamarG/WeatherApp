@@ -1,7 +1,7 @@
 http://localhost:8000/api/v1/get-token/ ---> get user token for api authentication
 http://localhost:8000/api/v1/signup/ ---> user sign-up
-http://localhost:8000/api/v2/location/ ---> GET/POST user locations
-http://localhost:8000/api/v2/delete-locations/<int:location_id>/ ---> DELETE user location
+http://localhost:8000/api/v2/locations/ ---> GET/POST user locations
+http://localhost:8000/api/v3/location/delete/ ---> DELETE user location
 http://localhost:8000/api/v3/locations/ ---> GET all locations in database
 http://localhost:8000/api/v4/location_data/<str:city>/ ---> GET weather data for city
 http://localhost:8000/api/v4/user_location_data/ ---> GET weather data for city && zipcode
