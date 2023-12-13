@@ -51,8 +51,9 @@ export async function basicFetch(url, payload) {
   }
   
 
-  export async function myWeatherInformation(){
-    const API_URL = 'http://localhost:8000/api/v4/user_location_data/';
+  export async function myWeatherInformation(city){
+    city = city
+    const API_URL = 'http://localhost:8000/api/v4/forecast_location_data/';
     const userToken = localStorage.getItem("token")
     const payload = {
       method: "GET",
@@ -61,7 +62,8 @@ export async function basicFetch(url, payload) {
         "Authorization": `Token ${userToken}`
       },
     }
-    const body = await basicFetch(`${API_URL}`, payload)
+    const body = await 
+    basicFetch(`${API_URL}+${city}/`, payload)
     return body
   }
 
