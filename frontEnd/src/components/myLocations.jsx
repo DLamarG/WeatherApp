@@ -72,15 +72,17 @@ const MyLocations = () => {
 
   return (
     <main className='mt-4' style={{ backgroundImage: `url(${backgroundImage})`, backgroundSize: '70%', backgroundRepeat: 'center' }}>
-    <div className='container mt-4'>
+    <div className='container'>
       <form onSubmit={handleSubmit}>
-        <div className='mb-3'>
+        <div className='input-group rounded mb-3'>
           <label htmlFor='city' className='form-label'>
-            City/Zipcode:
+          <h3 className='mb-3 ' style={{ color: 'white', fontSize: '36px', fontFamily: 'YourChosenFont, sans-serif' }}>
+              Check the 3 day weather forecast
+          </h3>
           </label>
           <input
             type='text'
-            className='width:300px center border-radius'
+            className='width:100px input-group rounded mb-3'
             id='city'
             value={city}
             onChange={handleCityChange}

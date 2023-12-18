@@ -75,7 +75,9 @@ function Home() {
                 <form onSubmit={handleSubmit}>
                   <div className='row d-flex justify-content-center align-items-center h-100'>
                     <div className='col-md-8 col-lg-6 col-xl-4'>
-                      <h3 className='mb-4 pb-2 fw-normal'>Check the weather forecast</h3>
+                    <h3 className='mb-4 pb-2 fw-normal' style={{ color: 'white', fontSize: '36px', fontFamily: 'YourChosenFont, sans-serif' }}>
+                      Check the weather forecast
+                    </h3>
                       <div className='input-group rounded mb-3'>
                         <input
                           type='text'
