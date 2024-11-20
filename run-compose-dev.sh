@@ -8,7 +8,7 @@ export DEBUG=True
 export POSTGRES_DB=weather_app_db
 export POSTGRES_USER=postgres
 export POSTGRES_PASSWORD=postgres
-export API_KEY=f5ff204202e55c88e38a0595eac21e16
+export API_KEY=$1
 
 
 docker-compose -f docker_compose.dev.yml up -d --build
